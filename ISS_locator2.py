@@ -166,8 +166,6 @@ try:
         plt.pause(0.0001)
         
 except KeyboardInterrupt:
-    pass
-
-driver.quit()
-sys.exit()
+    driver.quit()
+    sys.exit()
 
