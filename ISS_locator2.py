@@ -25,9 +25,6 @@ loc = geolocator.geocode(city + ',' + state + ',' + country)
 lon1 = float(loc.longitude) #your current longitude
 lat1 = float(loc.latitude) #your current latitude
 
-#lon1=-94.581213
-#lat1=39.099912
-
 
 #ensures website opens silently
 options=Options()
@@ -42,7 +39,6 @@ url = 'http://www.isstracker.com/'
 #load the website using selenium, extract lat+long string
 driver=webdriver.Chrome(options=options,service=Service(ChromeDriverManager().install()))
 driver.get(url)
-
 
 #set up plot
 Rad = 1
@@ -94,36 +90,39 @@ try:
             bearing_deg = 360 + bearing_deg
             bearing = (2*np.pi) + bearing
 
-        print(f'Azimuth: {bearing_deg}')
-
 
 
         #compute elevation
 
-        a = np.square(np.sin(del_lat/2)) + np.cos(lat1_rad)*np.cos(lat2_rad)*np.square(np.sin(del_lon/2))
-        
-        C = 2*math.atan2(np.sqrt(a),np.sqrt(1-a)) #angle between coordinates (in radians)
-
+        a = np.square(
+                      np.sin(del_lat/2)) + np.cos(lat1_rad)*np.cos(lat2_rad)*np.square(np.sin(del_lon/2)
+                      )
+        C = 2*math.atan2(
+                         np.sqrt(a),np.sqrt(1-a) #angle between coordinates (in radians)
+                         )
         c = np.sqrt(
                     np.square(R) + np.square(R+H) - (2*R*(R+H)*np.cos(C))
                     )
-
         delta = np.arccos(
-                            (np.square(R) - np.square(c) - np.square(R+H))  /
-                            (-2*c*(R+H))
-                            )
-
+                          (np.square(R) - np.square(c) - np.square(R+H))  /
+                          (-2*c*(R+H))
+                          )
         theta = np.pi - delta - C
-
         el = theta-(np.pi/2)
-
         el_deg = np.rad2deg(el)
 
+        
+        #Display coordinates to console
+        print(f'Azimuth: {bearing_deg}')
         print(f'Elevation: {el_deg}')
+        print('Ctrl+C to terminate')
 
 
 
-        #generate plot point
+        #generate point to be appended to plot.
+        # Plot is stereographic projection of celestial sphere onto 2-D plane. 
+        # Color represents if ISS is above or below the plane (above or below the horizon)
+        # Red = below, blue = above
         d = Rad*np.cos(el)
 
         if bearing_deg <= 90:
@@ -159,7 +158,7 @@ try:
                 x.pop(0)
                 y.pop(0)
 
-            graph = plt.plot(x,y,color=color)[0]
+            plt.plot(x,y,color=color)[0]
             plt.draw()
 
         time.sleep(1)
