@@ -30,6 +30,8 @@ try:
         
         
         #for testing: Andromeda Galaxy
+        # RA and DE coordinates are effectively fixed for deep sky objects. Input those coordinates here
+        # Enter coordinates in decimal deg
         RA = 10.6833 # right accension of object
         DE = 41.2692 # declination of object
 
@@ -67,8 +69,6 @@ try:
         time.sleep(1)
         
 except KeyboardInterrupt:
-    pass
-
-sys.exit() #close terminal
+    sys.exit() #close terminal
 
 
